@@ -95,9 +95,7 @@ const teks = `
 │ .delowner
 ╰──────────────────`;
 
-await sock.sendMessage(
-  m.chat,
-  {
+await sock.sendMessage(m.chat, {
     document: fs.readFileSync("./package.json"),
     fileName: ucapanWaktu,
     mimetype: "image/png",
