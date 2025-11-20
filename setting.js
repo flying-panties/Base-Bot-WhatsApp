@@ -1,3 +1,11 @@
+/*
+• Developer : Denzy ZeroDay
+• Script Type : Case 
+• Telegram : https://t.me/pantatBegetar
+• Channel : https://whatsapp.com/channel/0029VbAwI4cJ3jv4IuzKob04
+
+• Jangan Lupa Follow My Github Dan Hidupin Star ⭐
+*/
 const chalk = require("chalk");
 const fs = require("fs");
 
