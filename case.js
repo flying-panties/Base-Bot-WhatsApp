@@ -78,7 +78,6 @@ ucapanWaktu = "Selamat Petang ";
 switch (command) {
 case "tes":
 case "menu": {
-
 const teks = `
 ╭───〔 *BOT INFO* 〕
 │ • *Owner* : @${global.owner}
@@ -96,25 +95,32 @@ const teks = `
 ╰──────────────────`;
 
 await sock.sendMessage(m.chat, {
-    document: fs.readFileSync("./package.json"),
-    fileName: ucapanWaktu,
-    mimetype: "image/png",
-    fileLength: 99999999,
-    caption: teks,
-    jpegThumbnail: fs.readFileSync('./media/java.jpg'), 
-    contextInfo: {
-      mentionedJid: [m.sender],
-      externalAdReply: {
-        title: botname,
-        body: "whatsapp bot 2025",
-        thumbnailUrl: "https://files.catbox.moe/d70s5h.jpg", 
-        sourceUrl: global.linkSaluran, 
-        mediaType: 1,
-        renderLargerThumbnail: true
-      }
+  document: fs.readFileSync("./package.json"),
+  fileName: ucapanWaktu,
+  mimetype: "image/png",
+  fileLength: 99999999,
+  caption: teks,
+  jpegThumbnail: fs.readFileSync('./media/java.jpg'),
+  contextInfo: {
+    mentionedJid: [m.sender],
+    externalAdReply: {
+      title: botname,
+      body: "whatsapp bot 2025",
+      thumbnailUrl: "https://files.catbox.moe/d70s5h.jpg",   
+      sourceUrl: global.linkSaluran,   
+      mediaType: 1,  
+      renderLargerThumbnail: true
+    },
+    isForwarded: true,  
+    forwardingScore: 999,  
+    forwardedNewsletterMessageInfo: {
+      newsletterJid: '120363402308105961@newsletter',  
+      newsletterName: 'Developer',  
+      serverMessageId: -1
     }
-  },
-  { quoted: m });
+  }
+},
+{ quoted: m });
 }
 break
 //==================================/       
