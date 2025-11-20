@@ -1,10 +1,11 @@
-process.on('uncaughtException', (err, origin) => {
-    console.error(chalk.red('[ERROR FATAL TIDAK TERDUGA]'), err, origin);
-});
-process.on('unhandledRejection', (reason, promise) => {
-    console.error(chalk.red('[PROMISE ERROR TIDAK TERDUGA]'), reason, promise);
-});
+/*
+• Developer : Denzy ZeroDay
+• Script Type : Case 
+• Telegram : https://t.me/pantatBegetar
+• Channel : https://whatsapp.com/channel/0029VbAwI4cJ3jv4IuzKob04
 
+• Jangan Lupa Follow My Github Dan Hidupin Star ⭐
+*/
 require('./setting');
 const fs = require('fs');
 const pino = require('pino');
