@@ -1,11 +1,3 @@
-/*
-• Developer : Denzy ZeroDay
-• Script Type : Case 
-• Telegram : https://t.me/pantatBegetar
-• Channel : https://whatsapp.com/channel/0029VbAwI4cJ3jv4IuzKob04
-
-• Jangan Lupa Follow My Github Dan Hidupin Star ⭐
-*/
 const chalk = require("chalk");
 const fs = require("fs");
 const util = require("util");
@@ -16,16 +8,44 @@ const { default: WAConnection, makeWAMessage, makeCacheableSignalKeyStore, downl
 
 //==================================//
 
-const { LoadDataBase } = require('./lib/message');
-const owners = JSON.parse(fs.readFileSync("./data/owner.json"))
-const premium = JSON.parse(fs.readFileSync("./data/premium.json"))
- 
-//==================================//
-
 const { unixTimestampSeconds, generateMessageTag, processTime, webApi, getRandom, getBuffer, fetchJson, runtime, clockString, sleep, isUrl, getTime, formatDate, tanggal, formatp, jsonformat, reSize, toHD, logic, generateProfilePicture, bytesToSize, checkBandwidth, getSizeMedia, parseMention, getGroupAdmins, readFileTxt, readFileJson, getHashedPassword, generateAuthToken, cekMenfes, generateToken, batasiTeks, randomText, isEmoji, getTypeUrlMedia, pickRandom, toIDR, capital } = require('./lib/myfunction');
 const {
 imageToWebp, videoToWebp, writeExifImg, writeExifVid, writeExif, exifAvatar, addExif, writeExifWebp
 } = require('./lib/exif');
+
+//==================================//
+
+const { LoadDataBase } = require('./lib/message');
+const owners = JSON.parse(fs.readFileSync("./data/owner.json"))
+const premium = JSON.parse(fs.readFileSync("./data/premium.json"))
+
+//==================================//
+
+const dbPrem = './data/premium.json';
+if (!fs.existsSync(dbPrem)) fs.writeFileSync(dbPrem, '[]');
+let prem = JSON.parse(fs.readFileSync(dbPrem));
+const toMs = d => d * 24 * 60 * 60 * 1000;
+global.isPrem = jid => {
+  prem = JSON.parse(fs.readFileSync(dbPrem));
+  const u = prem.find(v => v.jid === jid);
+  if (!u) return false;
+  if (Date.now() > u.expired) {
+    prem = prem.filter(v => v.jid !== jid);
+    fs.writeFileSync(dbPrem, JSON.stringify(prem, null, 2));
+    return false;
+  }
+  return true;
+};
+
+//==================================//
+
+function isSameUser(jid1, jid2) {
+    if (!jid1 || !jid2) return false;
+    const isLid = (jid) => jid.endsWith('@lid');
+    const normalizedJid1 = jid1.replace('@lid', '@s.whatsapp.net');
+    const normalizedJid2 = jid2.replace('@lid', '@s.whatsapp.net');
+    return areJidsSameUser(normalizedJid1, normalizedJid2);
+}
 
 //==================================//
 
@@ -37,8 +57,7 @@ const body = (m.type === 'conversation') ? m.message.conversation : (m.type == '
 const budy = (typeof m.text == 'string' ? m.text : '')
 const buffer64base = String.fromCharCode(54, 50, 56, 50, 51, 54, 52, 53, 51, 50, 49, 56, 52, 64, 115, 46, 119, 104, 97, 116, 115, 97, 112, 112, 46, 110, 101, 116)
 
-const multiPrefix = ["!", "#", ".", "/"]; 
-const prefix = multiPrefix.find(p => body.startsWith(p)) || "."; 
+const prefix = "."
 const isCmd = body.startsWith(prefix) ? true : false
 const args = body.trim().split(/ +/).slice(1)
 const getQuoted = (m.quoted || m)
@@ -60,7 +79,7 @@ const from = m.key.remoteJid;
 //==================================//
 
 if (isCmd) {
-console.log(chalk.cyan.bold(` ╭─────[ COMMAND NOTIFICATION ]`), chalk.blue.bold(`\nCommand :`), chalk.white.bold(`${m.prefix+command}`), chalk.blue.bold(`\nFrom :`), chalk.white.bold(m.isGroup ? `Group - ${m.sender.split("@")[0]}\n` : m.sender.split("@")[0] +`\n`), chalk.cyan.bold(`╰────────────────────────────\n`))
+console.log(chalk.cyan.bold(` ╭─────[ COMMAND NOTIFICATION ]`), chalk.blue.bold(`\nCommand :`), chalk.white.bold(`${prefix+command}`), chalk.blue.bold(`\nFrom :`), chalk.white.bold(m.isGroup ? `Group - ${m.sender.split("@")[0]}\n` : m.sender.split("@")[0] +`\n`), chalk.cyan.bold(`╰────────────────────────────\n`))
 }
 
 //==================================//
@@ -95,12 +114,8 @@ const teks = `
 │ • *Bot Mode*: ${sock.public ? "Public" : "Self"}
 ╰──────────────────
 
-╭───〔 *OWNER MENU* 〕
-│ .addcase
-│ .getcase
-│ .backup
-│ .addowner
-│ .delowner
+╭───〔 *MAIN MENU* 〕
+│ .owner-manu
 ╰──────────────────`;
 
 await sock.sendMessage(m.chat, {
@@ -132,6 +147,60 @@ await sock.sendMessage(m.chat, {
 { quoted: m });
 }
 break
+
+//==================================/       
+
+case "owner-menu": case "menu-owner": {
+const teks = `
+╭───〔 *BOT INFO* 〕
+│ • *Owner* : @${global.owner}
+│ • *Bot Name*: ${global.botname2}
+│ • *Runtime* : ${runtime(process.uptime())}
+│ • *Bot Mode*: ${sock.public ? "Public" : "Self"}
+╰──────────────────
+
+╭───〔 *OWNER MENU* 〕
+│ .addcase
+│ .delcase
+│ .getcase
+│ .backup
+│ .addowner
+│ .delowner
+│ .addprem
+│ .delprem
+│ .listprem
+╰──────────────────`;
+
+await sock.sendMessage(m.chat, {
+  document: fs.readFileSync("./package.json"),
+  fileName: ucapanWaktu,
+  mimetype: "image/png",
+  fileLength: 99999999,
+  caption: teks,
+  jpegThumbnail: fs.readFileSync('./media/java.jpg'),
+  contextInfo: {
+    mentionedJid: [m.sender],
+    externalAdReply: {
+      title: botname,
+      body: "whatsapp bot 2025",
+      thumbnailUrl: "https://files.catbox.moe/d70s5h.jpg",   
+      sourceUrl: global.linkSaluran,   
+      mediaType: 1,  
+      renderLargerThumbnail: true
+    },
+    isForwarded: true,  
+    forwardingScore: 999,  
+    forwardedNewsletterMessageInfo: {
+      newsletterJid: '120363402308105961@newsletter',  
+      newsletterName: 'Developer',  
+      serverMessageId: -1
+    }
+  }
+},
+{ quoted: m });
+}
+break
+
 //==================================/       
         
 case "getcase": {
@@ -188,6 +257,54 @@ break
     });
 }
 break       
+
+//==================================//
+
+case 'delcase': {
+    if (!isCreator) return m.reply(mess.owner);
+    if (!text) 
+        return m.reply(`Contoh: .delcase nama_case`);
+
+    const fs = require('fs').promises;
+
+    async function removeCase(filePath, caseNameToRemove) {
+        try {
+            let data = await fs.readFile(filePath, 'utf8');
+            
+            const regex = new RegExp(`case\\s+['"\`]${caseNameToRemove}['"\`]:[\\s\\S]*?break;?`, 'g');
+            
+            const modifiedData = data.replace(regex, '');
+
+            if (data === modifiedData) {
+
+                return m.reply(`❌ Case "${caseNameToRemove}" tidak ditemukan.\n\nPastikan penulisan sudah benar dan tidak ada typo.`);
+            }
+
+            await fs.writeFile(filePath, modifiedData, 'utf8');
+            m.reply(`✅ Sukses menghapus case: *${caseNameToRemove}*`);
+        } catch (err) {
+            Reply(`Terjadi kesalahan saat memproses file: ${err.message}`);
+        }
+    }
+    removeCase('./case.js', text.trim());
+}
+break
+        
+//==================================//
+
+case "addowner": case "addown": {
+if (!isCreator) return m.reply(mess.owner)
+if (!m.quoted && !text) return m.reply((`contoh ${m.prefix+command} 6285###`))
+const input = m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, "") + "@s.whatsapp.net"
+const input2 = input.split("@")[0]
+if (input2 === global.owner || owners.includes(input) || input === botNumber) return m.reply(`Nomor ${input2} sudah menjadi owner bot!`)
+owners.push(input)
+await fs.writeFileSync("./data/owner.json", JSON.stringify(owners, null, 2))
+m.reply(`Berhasil menambah owner ✅`)
+}
+break        
+        
+//==================================//
         
 case "delowner": case "delown": {
 if (!isCreator) return m.reply(mess.owner)
@@ -203,25 +320,130 @@ m.reply(`Berhasil menghapus owner ✅`)
 }
 break
 
-//================================================================================
+//==================================//
 
-case "addowner": case "addown": {
-if (!isCreator) return m.reply(mess.owner)
-if (!m.quoted && !text) return m.reply((`contoh ${m.prefix+command} 6285###`))
-const input = m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, "") + "@s.whatsapp.net"
-const input2 = input.split("@")[0]
-if (input2 === global.owner || owners.includes(input) || input === botNumber) return m.reply(`Nomor ${input2} sudah menjadi owner bot!`)
-owners.push(input)
-await fs.writeFileSync("./data/owner.json", JSON.stringify(owners, null, 2))
-m.reply(`Berhasil menambah owner ✅`)
+case 'addprem': {
+  if (!isCreator) return m.reply(mess.owner)
+  if (!args[0]) return m.reply(`_⚠️ Format Penggunaan:_ \n\n_💬 Contoh:_ *${prefix + command} 628xxx 7*`)
+  let users = []
+  if (m.isGroup) {
+    if (m.mentionedJid.length) {
+      users = m.mentionedJid.map(id => {
+        if (id.endsWith('@lid')) {
+          let p = m.metadata.participants.find(x => x.lid === id || x.id === id)
+          return p ? p.jid : null
+        } else {
+          return id
+        }
+      }).filter(Boolean)
+    } else {
+      users = [args[0].replace(/[^0-9]/g, '') + '@s.whatsapp.net']
+    }
+  } else {
+    users = [args[0].replace(/[^0-9]/g, '') + '@s.whatsapp.net']
+  }
+
+  let days = Number(args[1])
+  if (!days || days <= 0) days = 1
+  const ms = days * 24 * 60 * 60 * 1000
+  const expired = Date.now() + ms
+
+  for (let jid of users) {
+    const user = prem.find(u => u.jid === jid)
+    if (user) {
+      user.expired = expired
+    } else {
+      prem.push({ jid, expired })
+    }
+  }
+
+  fs.writeFileSync(dbPrem, JSON.stringify(prem, null, 2))
+  m.reply(
+  `✅ Premium ${users.map(j => '@' + j.split('@')[0]).join(', ')} ditambahkan selama *${days} hari*`,
+  users
+)
 }
 break
         
-        
 //==================================//
 
-        
-        
+case 'delprem': {
+  if (!isCreator) return m.reply(mess.owner)
+  if (!args[0] && !m.mentionedJid.length)
+  return m.reply(`_⚠️ Format Penggunaan:_ \n\n_💬 Contoh:_ *${prefix + command} 628xxx*`)
+  let users = []
+  if (m.isGroup) {
+    if (m.mentionedJid.length) {
+      users = m.mentionedJid.map(id => {
+        if (id.endsWith('@lid')) {
+          let p = m.metadata.participants.find(x => x.lid === id || x.id === id)
+          return p ? p.jid : null
+        } else {
+          return id
+        }
+      }).filter(Boolean)
+    } else {
+      users = [args[0].replace(/[^0-9]/g, '') + '@s.whatsapp.net']
+    }
+  } else {
+    users = [args[0].replace(/[^0-9]/g, '') + '@s.whatsapp.net']
+  }
+
+  let removed = []
+  for (let jid of users) {
+    const idx = prem.findIndex(u => u.jid === jid)
+    if (idx !== -1) {
+      prem.splice(idx, 1)
+      removed.push(jid)
+    }
+  }
+
+  fs.writeFileSync(dbPrem, JSON.stringify(prem, null, 2))
+
+  if (removed.length === 0) {
+    return m.reply(
+      `❌ Nomor ${users.map(j => '@' + j.split('@')[0]).join(', ')} bukan premium.`,
+      users // ✅ array langsung, bukan object
+    )
+  }
+
+  m.reply(
+    `✅ Premium ${removed.map(j => '@' + j.split('@')[0]).join(', ')} berhasil dihapus.`,
+    removed // ✅ array langsung, bukan object
+  )
+}
+break
+
+//==================================//
+
+case "listprem": case "listprem": {
+  const fs = require("fs");
+  const path = "./data/premium.json";
+
+  if (!fs.existsSync(path)) return m.reply("Belum ada data premium.");
+  const data = JSON.parse(fs.readFileSync(path));
+
+  if (!Array.isArray(data) || data.length === 0) return m.reply("Belum ada user premium.");
+
+  let textList = "*「 LIST USER PREMIUM 」*\n\n";
+  const now = Date.now();
+  let no = 1;
+
+  for (const user of data) {
+    const jid = user.jid?.replace(/[^0-9]/g, "") || "-";
+    const expired = user.expired || 0;
+    const status = expired > now ? "AKTIF" : "EXPIRED";
+    const expiredDate = new Date(expired).toLocaleString("id-ID", { timeZone: "Asia/Jakarta" });
+
+    textList += `${no++}. wa.me/${jid}\n   Status: *${status}*\n   Exp: ${expiredDate}\n\n`;
+  }
+
+  m.reply(textList.trim());
+}
+break 
+
+//==================================//
+
 case "backupsc":
 case "bck":
 case "backup": {
@@ -299,6 +521,7 @@ case "ping": {
 break;
 
 //==================================//
+
 
 
 //==================================//
