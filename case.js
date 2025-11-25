@@ -169,6 +169,8 @@ const teks = `
 │ .addprem
 │ .delprem
 │ .listprem
+│ .self
+│ .public
 ╰──────────────────`;
 
 await sock.sendMessage(m.chat, {
@@ -201,7 +203,27 @@ await sock.sendMessage(m.chat, {
 }
 break
 
-//==================================/       
+//==================================//
+
+case "self": {
+    if (!isCreator) return
+    sock.public = false
+    global.db.settings.isPublic = false; 
+    m.reply("Berhasil mengganti ke mode *self*")
+}
+break 
+
+//==================================//          
+        
+case "public": {
+    if (!isCreator) return
+    sock.public = true
+    global.db.settings.isPublic = true; 
+    m.reply("Berhasil mengganti ke mode *public*")
+}
+break
+
+//==================================//  		
         
 case "getcase": {
 if (!isCreator) return m.reply('khusus owner')
