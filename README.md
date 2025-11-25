@@ -21,3 +21,4 @@ cd Base-Bot-WhatsApp
 npm install
 npm start
 ```
+## Tolong Hidupin Star ⭐ Nya Untuk Support Creator ❤
