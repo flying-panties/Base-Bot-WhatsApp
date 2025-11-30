@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@denzy-official/baileys": "^1.2.7",
+    "@denzy-official/youtube_scraper": "^1.0.0",
     "@hapi/boom": "^10.0.0",
     "awesome-phonenumber": "^4.4.0",
     "axios": "^0.24.0",
