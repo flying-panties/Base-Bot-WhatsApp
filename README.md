@@ -2,7 +2,7 @@
     <img src="https://files.catbox.moe/d70s5h.jpg" width="100%" style="margin-left: auto;margin-right: auto;display: block;">
 </p>
 
-<h1 align="center">Base WhatsApp Type Case</h1>
+<h1 align="center">Base Bot WhatsApp Type Case</h1>
 
 <p align="center">
 <a href="https://github.com/Denzy-Z3roDay">
