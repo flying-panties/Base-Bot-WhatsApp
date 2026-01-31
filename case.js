@@ -1,3 +1,5 @@
+const axios = require("axios")
+const { Sticker } = require('wa-sticker-formatter')
 const chalk = require("chalk");
 const fs = require("fs");
 const util = require("util");
@@ -116,6 +118,7 @@ const teks = `
 
 ╭───〔 *MAIN MENU* 〕
 │ .owner-manu
+│ .owner-manu
 ╰──────────────────`;
 
 await sock.sendMessage(m.chat, {
@@ -185,7 +188,7 @@ await sock.sendMessage(m.chat, {
     externalAdReply: {
       title: botname,
       body: "whatsapp bot 2025",
-      thumbnailUrl: "https://files.catbox.moe/d70s5h.jpg",   
+      thumbnailUrl: "https://cdn.yupra.my.id/yp/6l186k33.jpg",   
       sourceUrl: global.linkSaluran,   
       mediaType: 1,  
       renderLargerThumbnail: true
@@ -194,7 +197,7 @@ await sock.sendMessage(m.chat, {
     forwardingScore: 999,  
     forwardedNewsletterMessageInfo: {
       newsletterJid: '120363402308105961@newsletter',  
-      newsletterName: 'Developer',  
+      newsletterName: 'Mikochan',  
       serverMessageId: -1
     }
   }
@@ -202,8 +205,319 @@ await sock.sendMessage(m.chat, {
 { quoted: m });
 }
 break
+        
+case "maker-menu": case "menu-maker": {
+const teks = `
+╭───〔 *BOT INFO* 〕
+│ • *Owner* : @${global.owner}
+│ • *Bot Name*: ${global.botname2}
+│ • *Runtime* : ${runtime(process.uptime())}
+│ • *Bot Mode*: ${sock.public ? "Public" : "Self"}
+╰──────────────────
+
+╭───〔 *MAKER MENU* 〕
+│ .brathd
+│ .brat
+│ .bratvid
+│ .bratanime
+│ .attp
+│ .ttp
+╰──────────────────`;
+
+await sock.sendMessage(m.chat, {
+  document: fs.readFileSync("./package.json"),
+  fileName: ucapanWaktu,
+  mimetype: "image/png",
+  fileLength: 99999999,
+  caption: teks,
+  jpegThumbnail: fs.readFileSync('./media/java.jpg'),
+  contextInfo: {
+    mentionedJid: [m.sender],
+    externalAdReply: {
+      title: botname,
+      body: "whatsapp bot 2025",
+      thumbnailUrl: "https://cdn.yupra.my.id/yp/6l186k33.jpg",   
+      sourceUrl: global.linkSaluran,   
+      mediaType: 1,  
+      renderLargerThumbnail: true
+    },
+    isForwarded: true,  
+    forwardingScore: 999,  
+    forwardedNewsletterMessageInfo: {
+      newsletterJid: '120363402308105961@newsletter',  
+      newsletterName: 'Mikochan',  
+      serverMessageId: -1
+    }
+  }
+},
+{ quoted: m });
+}
+break        
 
 //==================================//
+     
+case "bratvid": {
+    if (!text) 
+        return reply(`_⚠️ Format:_ ${prefix + command} teks`)
+
+    await sock.sendMessage(m.chat, { react: { text: '🕐', key: m.key } });
+
+    try {
+        const encoded = encodeURIComponent(text)
+        const url = `${global.api}/api/maker/bratvid?apikey=${encodeURIComponent(global.mikochan)}&text=${encoded}`
+
+        const res = await getBuffer(url)
+
+        if (!res || res.length < 5000)
+            return m.reply('❌ Gagal ambil video dari API')
+
+        const { Sticker } = require('wa-sticker-formatter')
+
+        const sticker = new Sticker(res, {
+            pack: global.packname,
+            author: global.ownername || pushname,
+            type: 'full',
+            quality: 100
+        })
+
+        const stickerBuffer = await sticker.toBuffer()
+
+        await sock.sendMessage(m.chat, {
+            sticker: stickerBuffer
+        }, { quoted: m })
+
+    } catch (e) {
+        console.error(e)
+        m.reply('⚠️ Error convert bratvid ke sticker')
+    }
+}
+break        
+        
+//==================================//        
+        
+case "bratHD":
+case "brathd": {
+    if (!text)
+        return m.reply(`_⚠️ Format Penggunaan:_\n\n_💬 Contoh:_ *${prefix + command} hallo*`)
+
+    await sock.sendMessage(m.chat, { react: { text: '🕐', key: m.key } })
+
+    try {
+        const axios = require('axios')
+        const { Sticker } = require('wa-sticker-formatter')
+
+        const url = `${global.api}/api/maker/brathd?apikey=${encodeURIComponent(global.mikochan)}&text=${encodeURIComponent(text)}`
+
+        const res = await axios.get(url, {
+            responseType: 'arraybuffer',
+            headers: {
+                'Accept': 'image/*'
+            }
+        })
+
+        const buffer = Buffer.from(res.data)
+
+        if (buffer.length < 500)
+            return m.reply('❌ API tidak mengembalikan gambar.')
+
+        const sticker = new Sticker(buffer, {
+            pack: global.packname,
+            author: global.ownername || pushname,
+            type: 'full',
+            quality: 100
+        })
+
+        await sock.sendMessage(m.chat, {
+            sticker: await sticker.toBuffer()
+        }, { quoted: m })
+
+    } catch (e) {
+        console.error('BRAT ERR:', e.response?.status, e.response?.data)
+        m.reply('⚠️ API 403 / key ditolak / kena proteksi.')
+    }
+}
+break       
+        
+//==================================//        
+        
+case "bratanime": {
+    if (!text)
+        return m.reply(`_⚠️ Format:_\n\n_Contoh:_ *${prefix + command} hallo*`)
+
+    await sock.sendMessage(m.chat, { react: { text: '🕐', key: m.key } })
+
+    try {
+        const axios = require('axios')
+        const { Sticker } = require('wa-sticker-formatter')
+
+        const url = `${global.api}/api/maker/bratanime?apikey=${encodeURIComponent(global.mikochan)}&text=${encodeURIComponent(text)}`
+
+        const res = await axios.get(url, {
+            responseType: 'arraybuffer',
+            headers: {
+                'User-Agent': 'Mozilla/5.0',
+                'Accept': 'image/*'
+            }
+        })
+
+        const buffer = Buffer.from(res.data)
+
+        if (!buffer || buffer.length < 500)
+            return m.reply('❌ Gagal ambil gambar dari API.')
+
+        const sticker = new Sticker(buffer, {
+            pack: global.packname,
+            author: global.ownername || pushname,
+            type: 'full',
+            quality: 100
+        })
+
+        const out = await sticker.toBuffer()
+
+        await sock.sendMessage(m.chat, {
+            sticker: out
+        }, { quoted: m })
+
+    } catch (e) {
+        console.error(e)
+        m.reply('⚠️ Error saat membuat sticker bratanime.')
+    }
+}
+break        
+        
+//==================================//        
+        
+case "brat": {
+    if (!text)
+        return m.reply(`_⚠️ Format:_\n\n_Contoh:_ *${prefix + command} hallo*`)
+
+    await sock.sendMessage(m.chat, { react: { text: '🕐', key: m.key } })
+
+    try {
+        const axios = require('axios')
+        const { Sticker } = require('wa-sticker-formatter')
+
+        const url = `${global.api}/api/maker/brat?apikey=${encodeURIComponent(global.mikochan)}&text=${encodeURIComponent(text)}`
+
+        const res = await axios.get(url, {
+            responseType: 'arraybuffer',
+            headers: {
+                'User-Agent': 'Mozilla/5.0',
+                'Accept': 'image/*'
+            }
+        })
+
+        const buffer = Buffer.from(res.data)
+
+        if (!buffer || buffer.length < 500)
+            return m.reply('❌ Gagal ambil gambar dari API.')
+
+        const sticker = new Sticker(buffer, {
+            pack: global.packname,
+            author: global.ownername || pushname,
+            type: 'full',
+            quality: 100
+        })
+
+        const out = await sticker.toBuffer()
+
+        await sock.sendMessage(m.chat, {
+            sticker: out
+        }, { quoted: m })
+
+    } catch (e) {
+        console.error(e)
+        m.reply('⚠️ Error saat membuat sticker brat.')
+    }
+}
+break        
+        
+//==================================// 
+        
+case "ttp": {
+    if (!text)
+        return m.reply(`⚠️ Format: ${prefix + command} teks`)
+
+    await sock.sendMessage(m.chat, { react: { text: '🕐', key: m.key } })
+
+    try {
+        const encoded = encodeURIComponent(text)
+        const url = `${global.api}/maker/ttp?apikey=${encodeURIComponent(global.mikochan)}&text=${encoded}`
+
+        const res = await getBuffer(url)
+        if (!res || res.length < 1000)
+            return m.reply('❌ Gagal ambil image dari API')
+
+        const { Sticker } = require('wa-sticker-formatter')
+
+        const sticker = new Sticker(res, {
+            pack: global.packname,
+            author: global.ownername || pushname,
+            type: 'full',
+            quality: 100
+        })
+
+        const out = await sticker.toBuffer()
+
+        await sock.sendMessage(m.chat, {
+            sticker: out
+        }, { quoted: m })
+
+    } catch (e) {
+        console.error(e)
+        m.reply('⚠️ Error saat membuat sticker ttp')
+    }
+}
+break        
+        
+//==================================//        
+        
+case "attp": {
+    if (!text)
+        return m.reply(`⚠️ Format: ${prefix + command} teks`)
+
+    await sock.sendMessage(m.chat, { react: { text: '🕐', key: m.key } });
+
+    try {
+        const encoded = encodeURIComponent(text)
+        const url = `${global.api}/maker/attp?apikey=${encodeURIComponent(global.mikochan)}&text=${encoded}`
+
+        const res = await getBuffer(url)
+
+        if (!res || res.length < 5000)
+            return m.reply('❌ Gagal ambil video/gif dari API')
+
+        const { Sticker } = require('wa-sticker-formatter')
+
+        const sticker = new Sticker(res, {
+            pack: global.packname,
+            author: global.ownername || pushname,
+            type: 'full',     
+            quality: 100
+        })
+
+        const stickerBuffer = await sticker.toBuffer()
+
+        await sock.sendMessage(m.chat, {
+            sticker: stickerBuffer
+        }, { quoted: m })
+
+    } catch (e) {
+        console.error(e)
+        m.reply('⚠️ Error saat membuat sticker attp')
+    }
+}
+break
+
+        
+//==================================//        
+        
+        
+//==================================//        
+        
+//==================================//        
+        
+//==================================//        
 
 case "self": {
     if (!isCreator) return
