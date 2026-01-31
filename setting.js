@@ -22,6 +22,8 @@ global.telegram = "t.me/pantatbegetar"
 global.namaChannel = "Denzy ZeroDay"
 global.linkSaluran = "https://whatsapp.com/channel/0029VbAwI4cJ3jv4IuzKob04"
 
+global.api = "https://api.mikochan.my.id"
+global.mikochan = "Denzy ZeroDay"
 
 global.mess = {
     owner: `🚫 *AKSES DITOLAK*\nFitur ini hanya bisa digunakan oleh *Owner Bot*.`,
