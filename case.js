@@ -118,7 +118,7 @@ const teks = `
 
 ╭───〔 *MAIN MENU* 〕
 │ .owner-manu
-│ .owner-manu
+│ .maker-manu
 ╰──────────────────`;
 
 await sock.sendMessage(m.chat, {
